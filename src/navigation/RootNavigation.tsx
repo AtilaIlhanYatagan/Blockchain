@@ -2,9 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../HomeScreen';
 import Detail from '../Detail';
 import { BlockData } from '../axios/fetchLatestHash';
+import SearchPage from '../SearchPage';
 export type RootStackParamList = {
     HomeScreen: undefined;
     Detail: { blockData: BlockData };
+    SearchPage: { latestBlockNumber: string };
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,6 +19,7 @@ export default function RootNavigation() {
             }}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="Detail" component={Detail} />
+            <Stack.Screen name="SearchPage" component={SearchPage} />
         </Stack.Navigator>
     );
 }

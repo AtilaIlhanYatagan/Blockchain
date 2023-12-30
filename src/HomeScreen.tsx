@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlockData, fetchLatestBlock } from './axios/fetchLatestHash';
 import { G, Path, Svg } from 'react-native-svg';
 import Animated, { FadeInLeft, PinwheelIn } from 'react-native-reanimated'
+import { formatTime } from './util/formatTime';
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 const HomeScreen = () => {
@@ -66,35 +67,17 @@ const HomeScreen = () => {
                     </LinearGradient>
                 </TouchableOpacity>
 
-
-                <LinearGradient colors={['#66ccff', '#00cc66']} style={styles.square}>
-                    <Text style={styles.squareText}>Search Blocks</Text>
-                </LinearGradient>
+                <TouchableOpacity onPress={() => latestBlock && navigation.navigate("SearchPage", { latestBlockNumber: latestBlock.height.toString() })}>
+                    <LinearGradient colors={['#66ccff', '#00cc66']} style={styles.square}>
+                        <Text style={styles.squareText}>Search Blocks</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
             </View>
 
         </LinearGradient>
     );
 }
-//<Button title='asd' onPress={() => navigation.navigate("Detail")} />
 export default HomeScreen;
-
-const formatTime = (unixTimestamp: number): string => {
-    // Create a new JavaScript Date object based on the timestamp
-    // multiplied by 1000 so that the argument is in milliseconds, not seconds
-    const date = new Date(unixTimestamp * 1000);
-
-    // Hours part from the timestamp
-    const hours = date.getHours();
-
-    // Minutes part from the timestamp
-    const minutes = `0${date.getMinutes()}`.slice(-2);
-
-    // Seconds part from the timestamp
-    const seconds = `0${date.getSeconds()}`.slice(-2);
-
-    // Will display time in 10:30:23 format
-    return `${hours}:${minutes}:${seconds}`;
-};
 
 const styles = StyleSheet.create({
     container: {
@@ -103,16 +86,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     square: {
-        width: 100, // Adjust the width as needed
-        height: 96, // Adjust the height as needed
-        borderRadius: 15, // Adjust the border radius as needed
+        width: 100,
+        height: 96,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10, // Adjust the margin as needed
+        marginTop: 10,
     },
     squareText: {
-        color: 'black', // Adjust the text color as needed
-        fontSize: 18, // Adjust the font size as needed
+        color: 'black',
+        fontSize: 18,
         fontWeight: "700",
         textAlign: 'center'
     },
@@ -120,7 +103,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         width: "100%",
-        marginBottom: 16, // Adjust the margin as needed
+        marginBottom: 16,
     },
     headerText: {
         color: "white",
