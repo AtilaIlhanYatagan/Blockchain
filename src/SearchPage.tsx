@@ -1,4 +1,4 @@
-import { Keyboard, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { FlatList, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -51,43 +51,50 @@ const SearchPage = () => {
     };
 
     return (
-
-        <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1, backgroundColor:'#c5cffa' }}>
-            <PageHeader header="Search Blocks" onPress={() => navigaton.goBack()} ></PageHeader>
-            <View style={styles.container}>
-                <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1, backgroundColor: '#c5cffa' }}>
+                <PageHeader header="Search Blocks" onPress={() => navigaton.goBack()} ></PageHeader>
+                <View style={{ paddingHorizontal: 20, flex: 1 }}>
                     <Searchbar
                         placeholder="Search Blocks Here"
                         value={searchQuery}
                         onChangeText={onChangeSearch}
                         /* Search button on keyboard triggers this */
                         onSubmitEditing={handleSearchButtonPress}
-                        style={{backgroundColor: '#d9e8d1'}}
+                        style={{ backgroundColor: '#f2edf5', marginTop: 16 }}
                         placeholderTextColor={'#63696e'}
                         iconColor='#63696e'
                     />
                     <Text style={{ alignSelf: 'flex-start', marginVertical: 8, color: '#63696e' }}>Latest block number {latestBlockNumber}</Text>
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#0000ff" /> // Replace with your loading component
-                    ) : searchedBlock ? (
-                        <BlockDetailsScrollView searchedBlock={searchedBlock} />
-                    ) : (
-                        <Animated.View exiting={FadeOut} style={{ flex: 1, alignItems:'center' }}>
+
+                    {!searchedBlock && !loading && (
+                        <Animated.View exiting={FadeOut} style={{ alignItems: 'center', marginTop: 20 }}>
                             <SvgXml width="25%" height="45%" xml={richmanSvg}></SvgXml>
                         </Animated.View>
                     )}
+                   
+
+                    <ScrollView style={styles.container} >
+                        <View onStartShouldSetResponder={() => true}>
+                            {loading ? (
+                                <ActivityIndicator size="large" color="#0000ff" />
+                            ) : searchedBlock && (
+                                <BlockDetailsView searchedBlock={searchedBlock} />
+                            )}
+                        </View>
+                    </ScrollView>
+
+
                 </View>
             </View>
-
-        </View>
+        </TouchableWithoutFeedback>
 
     );
 }
 
-// BlockDetailsScrollView component
-const BlockDetailsScrollView: React.FC<{ searchedBlock: BlockData }> = ({ searchedBlock }) => (
-    <ScrollView style={{ flex: 1, marginTop: 16 }}>
 
+const BlockDetailsView: React.FC<{ searchedBlock: BlockData }> = ({ searchedBlock }) => (
+    <>
         <View style={styles.row}>
             <Text style={styles.labelText}>id:</Text>
             <Text style={styles.valueText}>{searchedBlock?.height}</Text>
@@ -116,32 +123,30 @@ const BlockDetailsScrollView: React.FC<{ searchedBlock: BlockData }> = ({ search
             <Text style={styles.labelText}>Transaction #:</Text>
             <Text style={styles.valueText}>{searchedBlock?.tx_count}</Text>
         </View>
-    </ScrollView>
+    </>
 );
+
 export default SearchPage
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingHorizontal: 20,
         paddingVertical: 16,
-     
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 16,
-        marginVertical: 4
+        paddingHorizontal: 4,
+        marginVertical: 2
     },
     labelText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "600",
         flex: 1,
         alignSelf: 'flex-start'
     },
     valueText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "600",
         flex: 1,
     },
