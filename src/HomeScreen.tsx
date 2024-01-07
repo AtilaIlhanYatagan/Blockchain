@@ -72,6 +72,12 @@ const HomeScreen = () => {
                         <Text style={styles.squareText}>Search Blocks</Text>
                     </LinearGradient>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => latestBlock && navigation.navigate("SearchAddressPage") }>
+                    <LinearGradient colors={['#a05ff5', '#ffcc00']} style={styles.square}>
+                        <Text style={styles.squareText}>Search  {"\n"} Tx/Adress</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
             </View>
 
         </LinearGradient>
@@ -97,7 +103,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 18,
         fontWeight: "700",
-        textAlign: 'center'
+        textAlign: 'center',
     },
     squareContainer: {
         flexDirection: 'row',
